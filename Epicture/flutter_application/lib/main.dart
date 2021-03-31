@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'globals.dart';
 import 'Pages/Homepage.dart';
-import 'Pages/MainPage.dart';
-import 'Pages/ConnectToImgur.dart';
+import 'Pages/BotBar.dart';
+import 'Pages/MyImagesPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,8 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         home: new MyHomePage(title: 'Welcome to Epicture'),
         routes: <String, WidgetBuilder>{
-          '/main': (BuildContext context) =>
-              new MainPage(title: 'Welcome to Epicture'),
+          '/main': (BuildContext context) => new BotBar(),
         });
   }
 }

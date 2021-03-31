@@ -24,6 +24,7 @@ dependencies:
   imgur:
   webview_flutter:
   flutter_web_auth:
+  image_picker:
   flutter:
     sdk: flutter
     

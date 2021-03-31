@@ -1,5 +1,5 @@
 import '../globals.dart';
-import '../api/Login.dart';
+import '../api/API.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -11,8 +11,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
   String errorOnSignIn = "";
 
   final logo = Padding(
@@ -25,20 +23,10 @@ class _MyHomePageState extends State<MyHomePage> {
           )));
 
   void loginClicked() {
-    //if (fetchLogin(emailController.text, passwordController.text)) {
-    //Navigator.pushNamed(context, '/login');
-    fetchLogin();
-    /*
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
-      setState(() {
-        errorOnSignIn = "";
-      });
-    } else {
-      setState(() {
-        errorOnSignIn = "Error in mail or password";
-      });
-    }*/
+    //fetchLogin(context);
+
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
   }
 
   @override
@@ -52,33 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             logo,
-            /*Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintText: 'Username or Email',
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0))),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: TextField(
-                controller: passwordController,
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: InputDecoration(
-                    hintText: 'Password',
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0))),
-              ),
-            ),*/
             Padding(
               padding: EdgeInsets.only(bottom: 5),
               child: ButtonTheme(
