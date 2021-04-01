@@ -5,11 +5,19 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:imgur/imgur.dart' as imgur;
 
 Future<bool> getImagesAccount() async {
-  final client = imgur.Imgur(imgur.Authentication.fromToken(token));
-  final resp = await client.account.getImages();
-  if (resp.isEmpty) return false;
-  myImages = resp.cast<Image>();
-  return true;
+  try {
+    final client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    final resp = await client.account.getImages();
+    if (resp.isEmpty) return false;
+    myImageslinks.clear();
+    for (var img in resp) {
+      myImageslinks.add(img.link);
+    }
+    return true;
+  } catch (e) {
+    print(e);
+  }
+  return false;
 }
 
 Future<bool> uploadImages(String path, String title, String description) async {
@@ -22,8 +30,19 @@ Future<bool> uploadImages(String path, String title, String description) async {
 }
 
 Future<bool> searchImages(String query) async {
-  final client = imgur.Imgur(imgur.Authentication.fromToken(token));
-  searchedImages = (await client.gallery.search(query)).cast<Image>();
+  try {
+    var client = imgur.Imgur(imgur.Authentication.fromClientId(clientID));
+    if (token != "")
+      client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    searchedImageslinks.clear();
+    var searchedImages = (await client.gallery.search(query));
+    for (var img in searchedImages) {
+      searchedImageslinks.add(img.images[0].link);
+    }
+  } catch (e) {
+    print(e);
+    return false;
+  }
   return true;
 }
 
@@ -32,7 +51,7 @@ Future<bool> fetchLogin(BuildContext context) async {
   final url = Uri.https('api.imgur.com', '/oauth2/authorize', {
     'response_type': 'token', //"pin",
     'client_id': clientID,
-    'redirect_uri': 'com.example.flutter_application',
+    'redirect_uri': 'com.example.flutter_application://success',
   });
   print(url.toString());
   try {
@@ -41,7 +60,6 @@ Future<bool> fetchLogin(BuildContext context) async {
         callbackUrlScheme: 'com.example.flutter_application');
     print(result);
     token = result;
-    //Navigator.of(context).pushReplacementNamed('/main');
     return true;
   } catch (e) {
     print(e);

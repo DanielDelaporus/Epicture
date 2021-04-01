@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'BotBar.dart';
+import '../api/globals.dart';
 
 class MyImagesPage extends StatefulWidget {
   MyImagesPage({Key key, this.title}) : super(key: key);
@@ -16,7 +16,10 @@ class _MyImagesPageState extends State<MyImagesPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text("My Images")],
+          children: <Widget>[
+            for (var link in myImageslinks)
+              if (link != null) Image.network(link),
+          ],
         ),
       ),
     );

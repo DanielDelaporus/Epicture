@@ -19,8 +19,29 @@ class _UploadImageState extends State<UploadImage> {
   final imagePicker = ImagePicker();
   File image;
 
-  void uploadImage() {
-    uploadImages(imagePath, titleController.text, descriptionController.text);
+  String errormsg = "";
+  String uploaded = "";
+
+  void uploadImage() async {
+    if (imagePath == "" ||
+        titleController.text == "" ||
+        descriptionController.text == "") {
+      setState(() {
+        errormsg = "Fill all the field to upload";
+      });
+    } else {
+      bool resp = await uploadImages(
+          imagePath, titleController.text, descriptionController.text);
+      setState(() {
+        if (resp) {
+          uploaded = "Image Uploaded";
+          errormsg = "";
+        } else {
+          uploaded = "";
+          errormsg = "Error during upload";
+        }
+      });
+    }
   }
 
   Future getImage() async {
@@ -28,8 +49,11 @@ class _UploadImageState extends State<UploadImage> {
 
     setState(() {
       if (pickedFile != null) {
+        uploaded = "Image selected";
         image = File(pickedFile.path);
         imagePath = pickedFile.path;
+      } else {
+        uploaded = "";
       }
     });
   }
@@ -37,53 +61,66 @@ class _UploadImageState extends State<UploadImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: TextField(
-                controller: titleController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintText: 'Enter a Title',
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0))),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 10, top: 10),
+            child: TextField(
+              controller: titleController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'Enter a Title',
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0))),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: TextField(
+              controller: descriptionController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: 'Enter a Description',
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0))),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: ButtonTheme(
+              height: 340,
+              child: RaisedButton(
+                child: Icon(Icons.add_photo_alternate,
+                    color: Colors.white, size: 120),
+                color: Colors.blueGrey,
+                shape: CircleBorder(side: BorderSide.none),
+                onPressed: getImage,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: TextField(
-                controller: descriptionController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintText: 'Enter a Description',
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0))),
+          ),
+          Text(uploaded, style: TextStyle(color: Colors.green)),
+          Padding(
+            padding: EdgeInsets.only(bottom: 3),
+            child: ButtonTheme(
+              height: 56,
+              child: RaisedButton(
+                child: Text('Upload',
+                    style: TextStyle(color: Colors.white, fontSize: 25)),
+                color: Colors.blueGrey,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50)),
+                onPressed: uploadImage,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 5),
-              child: ButtonTheme(
-                height: 56,
-                child: RaisedButton(
-                  child: Text('Connect to Imgur',
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
-                  color: Colors.blueGrey,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  onPressed: uploadImage,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+          Text(errormsg, style: TextStyle(color: Colors.red)),
+        ],
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

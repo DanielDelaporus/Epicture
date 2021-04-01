@@ -22,11 +22,13 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Image.asset('assets/logo.png'),
           )));
 
-  void loginClicked() {
-    //fetchLogin(context);
-
+  void loginClicked() async {
+    //bool resp = await fetchLogin(context);
+    //if (resp) {
+    getImagesAccount();
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
+    //}
   }
 
   @override

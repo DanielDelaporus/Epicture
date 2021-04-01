@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'MyImagesPage.dart';
+import '../api/API.dart';
 import 'UploadImage.dart';
 import 'SearchImage.dart';
 
@@ -12,7 +13,6 @@ class BotBar extends StatefulWidget {
 }
 
 class _BotBarState extends State<BotBar> {
-  @override
   int index = 0;
 
   void changeIndex(int touched) {
@@ -40,6 +40,7 @@ class _BotBarState extends State<BotBar> {
   Widget getBody(int ind) {
     switch (ind) {
       case 0:
+        getImagesAccount();
         return MyImagesPage();
         break;
       case 1:
@@ -53,6 +54,7 @@ class _BotBarState extends State<BotBar> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'globals.dart';
 import 'Pages/Homepage.dart';
 import 'Pages/BotBar.dart';
-import 'Pages/MyImagesPage.dart';
 
 void main() {
   runApp(MyApp());
