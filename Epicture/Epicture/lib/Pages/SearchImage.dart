@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../api/API.dart';
 import '../api/globals.dart';
+import 'ImageWidget.dart';
 
 class SearchImage extends StatefulWidget {
   SearchImage({Key key, this.title}) : super(key: key);
@@ -17,6 +18,13 @@ class _SearchImageState extends State<SearchImage> {
   void submitSearch(String query) async {
     bool resp = await searchImages(query);
     if (!resp) print("------------------------ Submission error");
+  }
+
+  String type(String link) {
+    if (link.substring(link.length - 3, link.length) == "png") return "png";
+    if (link.substring(link.length - 4, link.length) == "jpeg") return "jpeg";
+    if (link.substring(link.length - 3, link.length) == "jpg") return "jpg";
+    return "";
   }
 
   @override
@@ -40,8 +48,20 @@ class _SearchImageState extends State<SearchImage> {
                         borderRadius: BorderRadius.circular(50.0))),
               ),
             ),
-            for (var link in searchedImageslinks)
-              if (link != null) Image.network(link),
+            new Expanded(
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                addAutomaticKeepAlives: true,
+                children: <Widget>[
+                  for (var link in searchedImageslinks)
+                    if (link != null &&
+                        (type(link) == "png" ||
+                            type(link) == "jpeg" ||
+                            type(link) == "jpg"))
+                      ImageWidget(link: link),
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -38,6 +38,7 @@ Future<bool> searchImages(String query) async {
     for (var img in searchedImages) {
       searchedImageslinks.add(img.images[0].link);
     }
+    print(searchedImageslinks);
   } catch (e) {
     print(e);
     return false;
