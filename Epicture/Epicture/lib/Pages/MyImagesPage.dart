@@ -22,10 +22,18 @@ class _MyImagesPageState extends State<MyImagesPage> {
 
   void getImages() {
     gallery.clear();
-    for (var link in myImageslinks)
-      if (link != null &&
-          (type(link) == "png" || type(link) == "jpeg" || type(link) == "jpg"))
-        gallery.add(ImageWidget(link: link));
+    for (var img in myImageslinks)
+      if (img.link != null &&
+          (type(img.link) == "png" ||
+              type(img.link) == "jpeg" ||
+              type(img.link) == "jpg")) {
+        gallery.add(ImageWidget(
+          link: img.link,
+          vote: img.vote,
+          imgID: img.id,
+        ));
+        print(img.vote);
+      }
   }
 
   List<Widget> getGallery() {

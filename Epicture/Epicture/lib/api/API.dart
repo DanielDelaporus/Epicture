@@ -12,7 +12,7 @@ Future<bool> getImagesAccount() async {
     if (resp.isEmpty) return false;
     myImageslinks.clear();
     for (var img in resp) {
-      myImageslinks.add(img.link);
+      myImageslinks.add(img);
     }
     return true;
   } catch (e) {
@@ -40,7 +40,7 @@ Future<bool> searchImages(String query) async {
     if (searchedImages == null) print("FUCK");
     for (imgur.GalleryAlbumImage img in searchedImages) {
       if (img != null && img.images[0].type != "video/mp4")
-        searchedImageslinks.add(img.images[0].link);
+        searchedImageslinks.add(img.images[0]);
     }
     print(searchedImageslinks);
   } catch (e) {
@@ -64,6 +64,18 @@ Future<bool> fetchLogin() async {
     print("SUCCESS ! --------------------- : " + result);
     token =
         Uri.parse(result.replaceAll('#', '?')).queryParameters['access_token'];
+    return true;
+  } catch (e) {
+    print(e);
+  }
+  return false;
+}
+
+Future<bool> setvote(String id, imgur.VoteType vote) async {
+  try {
+    final client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    final resp = await client.image.vote(id, vote);
+    if (resp) return false;
     return true;
   } catch (e) {
     print(e);
