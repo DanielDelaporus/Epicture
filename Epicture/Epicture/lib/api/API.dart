@@ -6,7 +6,9 @@ import 'package:imgur/imgur.dart' as imgur;
 Future<bool> getImagesAccount() async {
   try {
     final client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    print(myImageslinks);
     final resp = await client.account.getImages();
+    print(myImageslinks);
     if (resp.isEmpty) return false;
     myImageslinks.clear();
     for (var img in resp) {
@@ -29,14 +31,16 @@ Future<bool> uploadImages(String path, String title, String description) async {
 }
 
 Future<bool> searchImages(String query) async {
+  if (query == "") return false;
   try {
-    var client = imgur.Imgur(imgur.Authentication.fromClientId(clientID));
-    if (token != "")
-      client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    final client = imgur.Imgur(imgur.Authentication.fromToken(token));
     searchedImageslinks.clear();
-    var searchedImages = (await client.gallery.search(query));
-    for (var img in searchedImages) {
-      searchedImageslinks.add(img.images[0].link);
+    List<imgur.GalleryAlbumImage> searchedImages =
+        await client.gallery.search(query);
+    if (searchedImages == null) print("FUCK");
+    for (imgur.GalleryAlbumImage img in searchedImages) {
+      if (img != null && img.images[0].type != "video/mp4")
+        searchedImageslinks.add(img.images[0].link);
     }
     print(searchedImageslinks);
   } catch (e) {

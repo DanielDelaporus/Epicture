@@ -11,11 +11,26 @@ class MyImagesPage extends StatefulWidget {
 }
 
 class _MyImagesPageState extends State<MyImagesPage> {
+  List<Widget> gallery = new List<Widget>();
+
   String type(String link) {
     if (link.substring(link.length - 3, link.length) == "png") return "png";
     if (link.substring(link.length - 4, link.length) == "jpeg") return "jpeg";
     if (link.substring(link.length - 3, link.length) == "jpg") return "jpg";
     return "";
+  }
+
+  void getImages() {
+    gallery.clear();
+    for (var link in myImageslinks)
+      if (link != null &&
+          (type(link) == "png" || type(link) == "jpeg" || type(link) == "jpg"))
+        gallery.add(ImageWidget(link: link));
+  }
+
+  List<Widget> getGallery() {
+    getImages();
+    return gallery;
   }
 
   @override
@@ -27,17 +42,9 @@ class _MyImagesPageState extends State<MyImagesPage> {
           children: <Widget>[
             Expanded(
               child: ListView(
-                scrollDirection: Axis.vertical,
-                addAutomaticKeepAlives: true,
-                children: <Widget>[
-                  for (var link in myImageslinks)
-                    if (link != null &&
-                        (type(link) == "png" ||
-                            type(link) == "jpeg" ||
-                            type(link) == "jpg"))
-                      ImageWidget(link: link),
-                ],
-              ),
+                  scrollDirection: Axis.vertical,
+                  addAutomaticKeepAlives: true,
+                  children: getGallery()),
             )
           ],
         ),

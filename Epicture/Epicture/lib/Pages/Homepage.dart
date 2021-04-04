@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loginClicked() async {
     bool resp = await fetchLogin();
     if (resp) {
-      getImagesAccount();
+      await getImagesAccount();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
     }
