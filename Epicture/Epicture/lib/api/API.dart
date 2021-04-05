@@ -6,13 +6,34 @@ import 'package:imgur/imgur.dart' as imgur;
 Future<bool> getImagesAccount() async {
   try {
     final client = imgur.Imgur(imgur.Authentication.fromToken(token));
-    print(myImageslinks);
     final resp = await client.account.getImages();
-    print(myImageslinks);
     if (resp.isEmpty) return false;
     myImageslinks.clear();
     for (var img in resp) {
       myImageslinks.add(img);
+    }
+    return true;
+  } catch (e) {
+    print(e);
+  }
+  return false;
+}
+
+Future<bool> getFavAccount() async {
+  try {
+    final client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    List<imgur.GalleryAlbumImage> resp =
+        await client.account.getFavoriteImages();
+    myFavImages.clear();
+    for (var gal in resp) {
+      if (gal.isAlbum)
+        myFavImages.add(gal.images[0]);
+      else
+        myFavImages.add(imgur.Image(
+            link: gal.link,
+            vote: gal.vote,
+            favorite: gal.favorite,
+            id: gal.id));
     }
     return true;
   } catch (e) {
@@ -39,10 +60,15 @@ Future<bool> searchImages(String query) async {
         await client.gallery.search(query);
     if (searchedImages == null) print("FUCK");
     for (imgur.GalleryAlbumImage img in searchedImages) {
-      if (img != null && img.images[0].type != "video/mp4")
+      if (img.isAlbum)
         searchedImageslinks.add(img.images[0]);
+      else
+        searchedImageslinks.add(imgur.Image(
+            link: img.link,
+            vote: img.vote,
+            favorite: img.favorite,
+            id: img.id));
     }
-    print(searchedImageslinks);
   } catch (e) {
     print(e);
     return false;
@@ -57,7 +83,6 @@ Future<bool> fetchLogin() async {
     'client_id': clientID,
     'redirect_uri': addr + "://success",
   });
-  print(url.toString());
   try {
     final result = await FlutterWebAuth.authenticate(
         url: url.toString(), callbackUrlScheme: addr);
@@ -76,6 +101,18 @@ Future<bool> setvote(String id, imgur.VoteType vote) async {
     final client = imgur.Imgur(imgur.Authentication.fromToken(token));
     final resp = await client.image.vote(id, vote);
     if (resp) return false;
+    return true;
+  } catch (e) {
+    print(e);
+  }
+  return false;
+}
+
+Future<bool> setfav(String id) async {
+  try {
+    final client = imgur.Imgur(imgur.Authentication.fromToken(token));
+    final resp = await client.image.favorite(id);
+    if (resp == "") return false;
     return true;
   } catch (e) {
     print(e);

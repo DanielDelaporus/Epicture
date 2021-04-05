@@ -26,6 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bool resp = await fetchLogin();
     if (resp) {
       await getImagesAccount();
+      await getFavAccount();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
     }

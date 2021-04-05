@@ -3,10 +3,8 @@ import '../api/API.dart';
 import 'package:imgur/imgur.dart' as imgur;
 
 class ImageWidget extends StatefulWidget {
-  ImageWidget({Key key, this.link, this.vote, this.imgID}) : super(key: key);
-  final String link;
-  final String imgID;
-  final imgur.VoteType vote;
+  ImageWidget({Key key, this.img}) : super(key: key);
+  final imgur.Image img;
 
   @override
   _ImageWidgetState createState() => _ImageWidgetState();
@@ -16,12 +14,25 @@ class _ImageWidgetState extends State<ImageWidget> {
   List<Widget> gallery = new List<Widget>();
   MaterialColor up;
   MaterialColor down;
+  MaterialColor fav;
 
   @override
   // ignore: must_call_super
   void initState() {
-    up = (widget.vote == imgur.VoteType.up) ? Colors.green : Colors.grey;
-    down = (widget.vote == imgur.VoteType.down) ? Colors.green : Colors.grey;
+    up = (widget.img.vote == imgur.VoteType.up) ? Colors.green : Colors.grey;
+    down =
+        (widget.img.vote == imgur.VoteType.down) ? Colors.green : Colors.grey;
+    fav = (widget.img.favorite) ? Colors.yellow : Colors.grey;
+  }
+
+  void addfav() async {
+    setState(() {
+      if (fav == Colors.grey)
+        fav = Colors.yellow;
+      else
+        fav = Colors.grey;
+    });
+    await setfav(widget.img.id);
   }
 
   void voteup() async {
@@ -29,7 +40,7 @@ class _ImageWidgetState extends State<ImageWidget> {
       up = Colors.green;
       down = Colors.grey;
     });
-    await setvote(widget.imgID, imgur.VoteType.up);
+    await setvote(widget.img.id, imgur.VoteType.up);
   }
 
   void votedown() async {
@@ -37,7 +48,7 @@ class _ImageWidgetState extends State<ImageWidget> {
       up = Colors.grey;
       down = Colors.green;
     });
-    await setvote(widget.imgID, imgur.VoteType.down);
+    await setvote(widget.img.id, imgur.VoteType.down);
   }
 
   @override
@@ -51,7 +62,7 @@ class _ImageWidgetState extends State<ImageWidget> {
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.network(widget.link),
+            Image.network(widget.img.link),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -66,6 +77,12 @@ class _ImageWidgetState extends State<ImageWidget> {
                   color: Colors.blueGrey,
                   shape: CircleBorder(side: BorderSide.none),
                   onPressed: votedown,
+                ),
+                RaisedButton(
+                  child: Icon(Icons.star, color: fav),
+                  color: Colors.blueGrey,
+                  shape: CircleBorder(side: BorderSide.none),
+                  onPressed: addfav,
                 ),
               ],
             )

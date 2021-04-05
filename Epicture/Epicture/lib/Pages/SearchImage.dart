@@ -38,9 +38,7 @@ class _SearchImageState extends State<SearchImage> {
                 type(img.link) == "jpeg" ||
                 type(img.link) == "jpg"))
           gallery.add(ImageWidget(
-            link: img.link,
-            vote: img.vote,
-            imgID: img.id,
+            img: img,
           ));
     });
   }

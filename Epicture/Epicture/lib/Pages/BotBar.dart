@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'MyImagesPage.dart';
+import 'MyFavImages.dart';
 import '../api/API.dart';
 import 'UploadImage.dart';
 import 'SearchImage.dart';
@@ -14,14 +15,18 @@ class BotBar extends StatefulWidget {
 
 class _BotBarState extends State<BotBar> {
   int index = 0;
+  Widget body = MyImagesPage();
+  Text text = Text("My Gallery");
 
-  void changeIndex(int touched) {
+  Future changeIndex(int touched) async {
     setState(() {
       index = touched;
     });
+    body = await getBody(index);
+    text = await getText(index);
   }
 
-  Text getText(int ind) {
+  Future<Text> getText(int ind) async {
     switch (ind) {
       case 0:
         return Text("My Gallery");
@@ -30,6 +35,9 @@ class _BotBarState extends State<BotBar> {
         return Text("Search");
         break;
       case 2:
+        return Text("Favorites");
+        break;
+      case 3:
         return Text("Upload");
         break;
       default:
@@ -37,7 +45,7 @@ class _BotBarState extends State<BotBar> {
     }
   }
 
-  Widget getBody(int ind) {
+  Future<Widget> getBody(int ind) async {
     switch (ind) {
       case 0:
         getImagesAccount();
@@ -47,6 +55,10 @@ class _BotBarState extends State<BotBar> {
         return SearchImage();
         break;
       case 2:
+        getFavAccount();
+        return MyFavImages();
+        break;
+      case 3:
         return UploadImage();
         break;
       default:
@@ -58,10 +70,10 @@ class _BotBarState extends State<BotBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: getText(index),
+        title: text,
       ),
       body: Center(
-        child: getBody(index),
+        child: body,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -72,6 +84,10 @@ class _BotBarState extends State<BotBar> {
           BottomNavigationBarItem(
             label: 'Search',
             icon: Icon(Icons.search),
+          ),
+          BottomNavigationBarItem(
+            label: 'Favorites',
+            icon: Icon(Icons.star_outline),
           ),
           BottomNavigationBarItem(
             label: 'Upload Image',

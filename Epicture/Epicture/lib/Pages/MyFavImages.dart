@@ -3,21 +3,22 @@ import '../api/globals.dart';
 import '../api/API.dart';
 import 'ImageWidget.dart';
 
-class MyImagesPage extends StatefulWidget {
-  MyImagesPage({Key key, this.title}) : super(key: key);
+class MyFavImages extends StatefulWidget {
+  MyFavImages({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyImagesPageState createState() => _MyImagesPageState();
+  _MyFavImagesState createState() => _MyFavImagesState();
 }
 
-class _MyImagesPageState extends State<MyImagesPage> {
+class _MyFavImagesState extends State<MyFavImages> {
   List<Widget> gallery = new List<Widget>();
   @override
   void initState() {
     super.initState();
     getImages();
-    getImagesAccount().then((int) {
+
+    getFavAccount().then((int) {
       getImages();
     });
   }
@@ -31,7 +32,7 @@ class _MyImagesPageState extends State<MyImagesPage> {
 
   void getImages() {
     gallery.clear();
-    for (var img in myImageslinks)
+    for (var img in myFavImages)
       if (img.link != null &&
           (type(img.link) == "png" ||
               type(img.link) == "jpeg" ||
