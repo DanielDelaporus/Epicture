@@ -59,7 +59,7 @@ Future<bool> searchImages(String query) async {
     List<imgur.GalleryAlbumImage> searchedImages =
         await client.gallery.search(query);
     if (searchedImages == null) print("FUCK");
-    for (imgur.GalleryAlbumImage img in searchedImages) {
+    for (var img in searchedImages) {
       if (img.isAlbum)
         searchedImageslinks.add(img.images[0]);
       else

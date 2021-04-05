@@ -51,6 +51,8 @@ The **Pages folder** contains all the flutter visual pages.
   - **MyImagePage** : Display the Images for the logged in user's gallery.
   - **SearchImage** : Display the Images search from a TextInput query.
   - **UploadImage** : Gives the option to the user to upload image to their account's gallery.
+  - **MyFavImages** : Display the Images that the account logged in has tagged has favorites.
+  - **ImageWidget** : General Stateless widget the displays images with different buttons.
 
 
 # Contact me
